@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 
-// stack holds a slice
+// stack holds a slice of int
 type stack struct {
 	items []int
 }
@@ -27,7 +27,7 @@ func (s *stack) pop() int {
 
 
 func main() {
-	s := stack{}
+	s := &stack{}
 
 	// adding items to the stack
 	fmt.Println("Adding new items to the stack:")
