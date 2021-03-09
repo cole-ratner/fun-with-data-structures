@@ -13,7 +13,7 @@ type node struct {
 
 // linkedList is the primary data structure
 type linkedList struct {
-	head *node
+	head   *node
 	length int
 }
 
@@ -26,7 +26,7 @@ func (l *linkedList) prepend(n *node) {
 }
 
 // helper func that gets the last node in the list
-func (l *linkedList) getLast() *node{
+func (l *linkedList) getLast() *node {
 	var last *node
 
 	for node := l.head; node != nil; node = node.next {
@@ -45,16 +45,16 @@ func (l *linkedList) append(n *node) {
 }
 
 // iterates through the entire list and prints all the nodes
-func (l * linkedList) printAll() {
+func (l *linkedList) printAll() {
 	for node := l.head; node != nil; node = node.next {
-		fmt.Printf("Found a Node! {data: %d, next: %v}\n", node.data, node.next) 
+		fmt.Printf("Found a Node! {data: %d, next: %v}\n", node.data, node.next)
 	}
 }
 
 // looks for a node with a specific node.data value
 func (l *linkedList) findNodeWithValue(v int) (*node, error) {
 	var wanted *node
-	
+
 	for node := l.head; node != nil; node = node.next {
 		if node.data == v {
 			wanted = node
@@ -70,7 +70,7 @@ func (l *linkedList) insertAfterNodeWithValue(v int, n *node) error {
 	if err != nil {
 		return err
 	}
-	
+
 	if prev.next == nil {
 		prev.next = n
 	}
@@ -81,34 +81,67 @@ func (l *linkedList) insertAfterNodeWithValue(v int, n *node) error {
 	return nil
 }
 
+func (l *linkedList) reverseList(n *node) {
+	// have: 3-1-33-15-29
+
+	// have: 1-3-33-15-29
+	// have: 33-1-3-15-29
+	// have: 15-33-1-3-29
+	// have: 29-15-33-1-3
+
+	// want: 29-15-33-1-3
+
+	if n == nil || n.next == nil {
+		return
+	}
+
+	var curr *node
+	var next *node
+	curr = n.next.next
+
+	for curr != nil {
+		next = curr.next
+		curr.next = n.next
+		n.next = curr
+		curr = next
+	}
+}
+
 
 func main() {
 	//instantiate a new linkedList
 	l := linkedList{}
 
-// 	adding nodes to the linkedlist in various ways
-	l.prepend(&node{data:1})
-	l.prepend(&node{data:3})
-	l.append(&node{data:15})
-	
-	err := l.insertAfterNodeWithValue(1, &node{data:33})
+	// 	adding nodes to the linkedlist in various ways
+	l.prepend(&node{data: 1})
+	l.prepend(&node{data: 3})
+	l.append(&node{data: 15})
+
+	err := l.insertAfterNodeWithValue(1, &node{data: 33})
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	l.append(&node{data:29})
-//	//////
-	
+	l.append(&node{data: 29})
+	//	//////
+
 	// getting & printing the last node
 	last := l.getLast()
 	fmt.Printf("Last Node: %v\n\n", last)
-	
+
 	// getting a node with a value
 	ok, err := l.findNodeWithValue(1)
-	if err != nil {fmt.Println(err)}
-	if 	ok != nil {fmt.Printf("Requested Node: %v\n\n", ok)}
+	if err != nil {
+		fmt.Println(err)
+	}
+	if ok != nil {
+		fmt.Printf("Requested Node: %v\n\n", ok)
+	}
 
 	// printing all nodes
 	fmt.Println("Now printing all nodes:")
+	l.printAll()
+
+	l.reverseList(l.head)
 	l.printAll()
 }
